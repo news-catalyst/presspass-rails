@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PresspassRails</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container">
+        <nav class="level">
+          <div class="level-left">
+            <div class="level-item">
+              PressPass Rails
+            </div>
+          </div>
+          <div class="level-right">
+          <% if user_signed_in? %>
+            Logged in as &nbsp; <strong><%= current_user.email %></strong> |
+            <%= link_to 'Edit profile', edit_user_registration_path, :class => 'level-item' %> |
+            <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'level-item'  %>
+          <% else %>
+            <%= link_to "Sign up", new_user_registration_path, :class => 'level-item'  %> |
+            <%= link_to "Login", new_user_session_path, :class => 'level-item'  %> |
+            <%= link_to "Login with Google", user_google_oauth2_omniauth_authorize_path %>
+          <% end %>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <section class="section">
+      <div class="container">
+        <% if notice %>
+          <p class="alert alert-success"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="alert alert-danger"><%= alert %></p>
+        <% end %>
+        <%= yield %>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        Copyright © 2020 News Catalyst.
+      </div>
+    </footer>
+  </body>
+</html>
