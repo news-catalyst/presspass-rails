@@ -6,9 +6,13 @@ You can add PressPass auth to your Rails application by following this guide. Pr
 
 While you're welcome to use your solution of choice, we'll be using the [openid-connect] rubygem in this guide.
 
-```Gemfile
+Add the following to your Gemfile:
+
+```
 gem 'openid-connect'
 ```
+
+Then run:
 
 ```
 bundle install
@@ -32,9 +36,9 @@ PP_OIDC_HOST=dev.presspass.com
 
 We'll keep our example Rails app very simple for purposes of clarity here - your Rails app will no doubt have a lot more going on. We'll have one route that is protected - `/dashboard` - and the rest will handle OIDC integration.
 
-Create a sessions controller and helper (or add to your existing files):
+Create a sessions controller (`app/controllers/sessions_controller.rb`) and helper (`app/helpers/sessions_helper.rb`), or add this code to your existing files where appropriate:
 
-```sessions_controller.rb
+```
 class SessionsController < ApplicationController
   # this maps to `/presspass/login` and should be the URL specified in PressPass as the client login URL
   def new
@@ -68,7 +72,7 @@ class SessionsController < ApplicationController
 end
 ```
 
-```sessions_helper.rb
+```
 module SessionsHelper
 
   def client
@@ -131,7 +135,7 @@ module SessionsHelper
 end
 ```
 
-Edit your routes to support the login, logout and callback/redirect URIs:
+Edit your routes (`config/routes.rb`) to support the login, logout and callback/redirect URIs:
 
 ```config/routes.rb
   get 'presspass/login', to: 'sessions#new', as: 'new_session'
@@ -141,9 +145,9 @@ Edit your routes to support the login, logout and callback/redirect URIs:
   get 'dashboard', to: 'dashboard#index'
 ```
 
-Create a dashboard controller that requires user authentication; we use this in our example Rails app to verify authentication is working.
+Create a dashboard controller (`app/controllers/dashboard_controller.rb`) that requires user authentication; we use this in our example Rails app to verify authentication is working.
 
-```dashboard_controller.rb
+```
 class DashboardController < ApplicationController
   before_action :require_current_user
 
@@ -152,9 +156,9 @@ class DashboardController < ApplicationController
 end
 ```
 
-And finally, setup a basic view for the `/dashboard` route:
+And finally, setup a basic view (`/app/views/dashboard/index.html.erb`) for the `/dashboard` route:
 
-```/app/views/dashboard/index.html.erb
+```
 <h1>Dashboard</h1>
 <p>
   You must be authenticated to see this page so if you're seeing it then
